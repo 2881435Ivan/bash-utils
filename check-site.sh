@@ -1,12 +1,16 @@
 #!/bin/bash
-SITE="https://google.com"
-LOG="/tmp/site-check.log"
-DATE=$(date)
+
+SITE="${1:-https://google.com}"
+LOG="/var/log/site-check.log"
+DATE=$(date +"%F %T")
+
+# Проверим доступность сайта
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SITE")
 
+# Запишем результат
 if [ "$STATUS" == "200" ]; then
-  echo "$DATE: $SITE is UP" >> "$LOG"
+  echo "$DATE | $SITE is UP [status: $STATUS]" >> "$LOG"
 else
-  echo "$DATE: $SITE is DOWN (status: $STATUS)" >> "$LOG"
+  echo "$DATE | $SITE is DOWN [status: $STATUS]" >> "$LOG"
 fi
 
